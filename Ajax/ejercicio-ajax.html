@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio AJAX</title>
+
+    <style>
+        h3 {
+            color: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    
+    <hr>
+    <h3>
+        Se necesita crear un mecanismo que permita inyectar código HTML que está una plantilla en un archivo externo, dentro de mi página web. La idea es disponer de un botón que cargue ese contenido dinámicamente.
+    </h3>
+    <hr>
+
+    <h1>Mi Página</h1>
+    <div id="contenido"></div>
+    <button>cargar contenido</button>
+
+    <script>
+        let btn = document.querySelector('button')
+        let contenidoCargado = false
+
+        /* Evento de click del botón */
+        btn.addEventListener('click', () => {
+            
+            //if(!contenidoCargado) {
+            if(contenidoCargado == false) {
+                let xhr = new XMLHttpRequest
+                xhr.open('get','plantilla.html')
+
+                /* Evento de fin del pedido de la plantilla */
+                xhr.addEventListener('load', () => {
+                    if(xhr.status == 200) {
+                        let plantilla = xhr.response
+                        console.log(plantilla)
+
+                        let div = document.createElement('div')
+                        div.innerHTML = plantilla
+                        //document.body.appendChild(div)
+                        let divContenido = document.getElementById('contenido')
+                        divContenido.appendChild(div)
+
+                        contenidoCargado = true
+                    }
+                    else {
+                        console.error('Error! status:', xhr.status)
+                    }
+                })
+                xhr.send()
+            }
+        })
+    </script>
+
+</body>
+</html>
